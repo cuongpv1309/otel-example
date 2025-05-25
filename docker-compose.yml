@@ -21,6 +21,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
 #      - GF_INSTALL_PLUGINS=grafana-service-graph-datasource,pyroscope-datasource
     volumes:
+      # set up datasource khi grafana dc khoi tao
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
 
   payment-service:
@@ -58,13 +59,14 @@ services:
       OTEL_TRACES_EXPORTER: otlp
       OTEL_METRICS_EXPORTER: none
       OTEL_LOGS_EXPORTER: none
+      PYROSCOPE_SERVER_ADDRESS: http://pyroscope:4040
+      PYROSCOPE_APPLICATION_NAME: order-service
       PAYMENT_SERVICE_URL: http://payment-service:8082
     ports:
       - "8084:8084"
     depends_on:
       - payment-service
       - tempo
-      - pyroscope
 
 volumes:
   grafana-storage:

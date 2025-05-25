@@ -14,3 +14,13 @@ datasources:
     uid: tempo
     jsonData:
       httpMethod: GET
+  - name: Grafana Pyroscope
+    type: grafana-pyroscope-datasource
+    access: proxy
+    orgId: 1
+    url: http://pyroscope:4040
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: true
+    uid: pyroscope

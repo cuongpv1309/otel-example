@@ -20,10 +20,10 @@ public class OrderServiceApplication {
 
 	@PostConstruct
 	public void init() {
-
+		System.out.println("Start initialize pyroscope serve");
 		PyroscopeAgent.start(
 				new Config.Builder()
-						.setApplicationName("ride-sharing-app-java")
+						.setApplicationName("order-app-java")
 						.setProfilingEvent(EventType.ITIMER)
 						.setFormat(Format.JFR)
 						.setServerAddress("http://pyroscope:4040")
