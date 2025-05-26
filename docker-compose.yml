@@ -24,6 +24,22 @@ services:
       # set up datasource khi grafana dc khoi tao
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
 
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    networks:
+      - spring-network
+
   payment-service:
     image: payment-service:latest
     container_name: payment-service
@@ -67,7 +83,13 @@ services:
     depends_on:
       - payment-service
       - tempo
+    networks:
+      - spring-network
 
 volumes:
   grafana-storage:
   pyroscope-storage:
+  postgres_data:
+
+networks:
+  spring-network:
