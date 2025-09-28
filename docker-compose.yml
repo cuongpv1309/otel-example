@@ -11,6 +11,9 @@ services:
     volumes:
       - ./config/tempo.yaml:/etc/tempo.yaml
 #      - ./config/tempo-data:/tmp/tempo
+    networks:
+      - spring-network
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -23,22 +26,24 @@ services:
     volumes:
       # set up datasource khi grafana dc khoi tao
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
-
-  postgres:
-    image: postgres:15
-    container_name: postgres-db
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
     networks:
       - spring-network
+
+#  postgres:
+#    image: postgres:15
+#    container_name: postgres-db
+#    environment:
+#      POSTGRES_DB: mydb
+#      POSTGRES_USER: root
+#      POSTGRES_PASSWORD: root
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+#    restart: always
+#    networks:
+#      - spring-network
 
   payment-service:
     image: payment-service:latest
@@ -54,15 +59,17 @@ services:
       - "8082:8082"
     depends_on:
       - tempo
+    networks:
+        - spring-network
 
-  pyroscope:
-    image: grafana/pyroscope:latest
-    container_name: pyroscope
-    ports:
-      - "4040:4040"
-    volumes:
-      - ./config/pyroscope:/etc/pyroscope.yaml
-    command: [ "server" ]
+#  pyroscope:
+#    image: grafana/pyroscope:latest
+#    container_name: pyroscope
+#    ports:
+#      - "4040:4040"
+#    volumes:
+#      - ./config/pyroscope:/etc/pyroscope.yaml
+#    command: [ "server" ]
 
   order-service:
     image: order-service:latest
@@ -75,8 +82,8 @@ services:
       OTEL_TRACES_EXPORTER: otlp
       OTEL_METRICS_EXPORTER: none
       OTEL_LOGS_EXPORTER: none
-      PYROSCOPE_SERVER_ADDRESS: http://pyroscope:4040
-      PYROSCOPE_APPLICATION_NAME: order-service
+#      PYROSCOPE_SERVER_ADDRESS: http://pyroscope:4040
+#      PYROSCOPE_APPLICATION_NAME: order-service
       PAYMENT_SERVICE_URL: http://payment-service:8082
     ports:
       - "8084:8084"
@@ -88,7 +95,7 @@ services:
 
 volumes:
   grafana-storage:
-  pyroscope-storage:
+#  pyroscope-storage:
   postgres_data:
 
 networks:

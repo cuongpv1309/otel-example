@@ -1,13 +1,13 @@
-server:
-  httpAddress: "0.0.0.0"
-  httpPort: 4040
-
-log-level: info
-
-storage:
-  backend: "disk"
-  path: "/var/lib/pyroscope"
-
-scrape:
-  enabled: true
-  targets: []
+#server:
+#  httpAddress: "0.0.0.0"
+#  httpPort: 4040
+#
+#log-level: info
+#
+#storage:
+#  backend: "disk"
+#  path: "/var/lib/pyroscope"
+#
+#scrape:
+#  enabled: true
+#  targets: []
